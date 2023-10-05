@@ -21,9 +21,9 @@
     {
         "prompt": "hello world2",
         "options": [
-            "a",
-            "b",
-            "c"
+            "D",
+            "E",
+            "F"
         ],
         "ans": 2
     }

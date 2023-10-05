@@ -35,6 +35,8 @@ fn main() -> anyhow::Result<()> {
     let quiz:Vec<Quiz> = serde_json::from_str(QEUSTION_STR)?;
     // print!("\x1B[2J\x1B[1;1H");
     println!("{}", "Welcome!".green());
+    let mut results:Vec<(bool, usize)> = Vec::with_capacity(quiz.len());
+
     for (i, q) in quiz.iter().enumerate(){
         let n_opt = q.options.len();
         loop{
@@ -54,16 +56,36 @@ fn main() -> anyhow::Result<()> {
         
             if ans == q.ans{
                 println!("{}", "Yes.".green().bold());
+                results.push((true, ans));
                 break
             }else{
                 println!("{}", "No.".red().bold());
                 let redo:bool = prompt_default("Do you want to retry this question?", false)?;
                 if !redo{
+                    results.push((false, ans));
                     break
                 }
             }
         }
     }
-
+    let spacer = "\n".to_string();
+    let results_str:String = results.into_iter().enumerate().map(|(i, (is_correct, ans))|{
+        let fmt_str= if is_correct{
+            format!("{}(O)", ans).green().bold()
+        }else{
+            format!("{}(X)", ans).red().bold()
+        };
+        format!("Q{}: {}",i+1, fmt_str)
+    }).intersperse(spacer)
+    .collect();
+    loop{
+        print!("\x1B[2J\x1B[1;1H");
+        println!("{}", "#### Summary ####".green().bold());
+        println!("{}", results_str);
+        let exit = prompt_default("Exit?", true)?;
+        if exit{
+            break
+        }
+    }
     Ok(())
 }
