@@ -33,7 +33,7 @@ fn main() -> anyhow::Result<()> {
     let quiz: Vec<Quiz> = serde_json::from_str(QEUSTION_STR)?;
     // print!("\x1B[2J\x1B[1;1H");
     println!("{}", "Welcome!".green());
-    let mut results: Vec<(bool, usize)> = Vec::with_capacity(quiz.len());
+    let mut records: Vec<i32> = Vec::with_capacity(quiz.len());
 
     for (i, q) in quiz.iter().enumerate() {
         let n_opt = q.options.len();
@@ -50,30 +50,29 @@ fn main() -> anyhow::Result<()> {
                 println!("---------------------------------");
                 println!("{}", format!("Invalid Input: {}", ans).on_red());
             };
-
             if ans == q.ans {
                 println!("{}", "Yes.".green().bold());
-                results.push((true, ans));
+                records.push(ans as i32);
                 break;
             } else {
                 println!("{}", "No.".red().bold());
                 let redo: bool = prompt_default("Do you want to retry this question?", false)?;
                 if !redo {
-                    results.push((false, ans));
+                    records.push(-(ans as i32));
                     break;
                 }
             }
         }
     }
     let spacer = "\n".to_string();
-    let results_str: String = results
+    let records_str: String = records
         .into_iter()
         .enumerate()
-        .map(|(i, (is_correct, ans))| {
-            let fmt_str = if is_correct {
+        .map(|(i, ans)| {
+            let fmt_str = if ans > 0 {
                 format!("{}(O)", ans).green().bold()
             } else {
-                format!("{}(X)", ans).red().bold()
+                format!("{}(X)", -ans).red().bold()
             };
             format!("Q{}: {}", i + 1, fmt_str)
         })
@@ -82,7 +81,7 @@ fn main() -> anyhow::Result<()> {
     loop {
         print!("\x1B[2J\x1B[1;1H");
         println!("{}", "#### Summary ####".green().bold());
-        println!("{}", results_str);
+        println!("{}", records_str);
         let exit = prompt_default("Exit?", true)?;
         if exit {
             break;
