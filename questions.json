@@ -1,0 +1,30 @@
+[
+    {
+        "prompt": "hello world1",
+        "options": [
+            "郭",
+            "猴",
+            "柯",
+            "賴"
+        ],
+        "ans": 4
+    },
+    {
+        "prompt": "hello world3",
+        "options": [
+            "a",
+            "b",
+            "c"
+        ],
+        "ans": 2
+    },
+    {
+        "prompt": "hello world2",
+        "options": [
+            "a",
+            "b",
+            "c"
+        ],
+        "ans": 2
+    }
+]
