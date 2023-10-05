@@ -10,7 +10,7 @@ This is a simple quiz application written in Rust. It reads quiz questions and o
 1. Clone the repository:
 
    ```bash
-   git clone [<repository-url>](https://github.com/lycantrope/qa_cli)
+   git clone https://github.com/lycantrope/qa_cli
    cd qa_cli
    ```
 
